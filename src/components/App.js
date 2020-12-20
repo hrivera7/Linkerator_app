@@ -1,28 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import Routes from "./utils/Routes";
+import "./styles.css";
 
-import {
-  getSomething
-} from '../api';
+import { getLinks } from "../api";
 
 const App = () => {
-  const [message, setMessage] = useState('');
+  const [links, setLinks] = useState({});
 
   useEffect(() => {
-    getSomething()
-      .then(response => {
-        setMessage(response.message);
-      })
-      .catch(error => {
-        setMessage(error.message);
-      });
-  });
+    getLinks().then((response) => {
+      console.log(response.allLinks);
+      setLinks(response.allLinks);
+    });
+  }, []);
+
+  console.log("links", links);
 
   return (
-    <div className="App">
-      <h1>Hello, World!</h1>
-      <h2>{ message }</h2>
-    </div>
+    <>
+      <Routes />
+    </>
   );
-}
+};
 
 export default App;
