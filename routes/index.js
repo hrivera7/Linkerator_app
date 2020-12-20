@@ -7,6 +7,7 @@ const {
   createLink,
   createLinkTag,
   getLinksByTag,
+  deleteLinkWithTag,
 } = require("../db");
 
 //get request
@@ -82,6 +83,19 @@ apiRouter.patch("/links/:id/add", async (req, res, next) => {
       console.log("updated link with new count", link);
       res.send({ link });
     }
+  } catch (error) {
+    next(error);
+  }
+});
+
+apiRouter.delete("/links/:linkId", async (req, res, next) => {
+  const { linkId } = req.params;
+  console.log("linkId", req.params.linkId);
+
+  try {
+    console.log("linkId", req.params.linkId);
+    const deletedLinks = await deleteLinkWithTag(linkId);
+    res.send({ deletedLinks });
   } catch (error) {
     next(error);
   }

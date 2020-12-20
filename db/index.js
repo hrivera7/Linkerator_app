@@ -228,7 +228,45 @@ async function createLinkTag(linkId, name) {
   }
 }
 
-// export
+async function deleteLinkWithTag(linkId) {
+  console.log("tag fields", linkId);
+  try {
+    // insert new tag
+    // console.log("before adding tags");
+    const {
+      rows: [tags],
+    } = await client.query(
+      `
+      DELETE from tags
+      WHERE "linkId" = $1
+      RETURNING *
+    `,
+      [linkId]
+    );
+
+    const {
+      rows: [link],
+    } = await client.query(
+      `
+      DELETE from links
+      WHERE "id" = $1
+      RETURNING *
+    `,
+      [linkId]
+    );
+    console.log("deleted tags and link", { tags, link });
+    return { tags, link };
+  } catch (error) {
+    throw error;
+  }
+}
+
+/* delete from tags
+where "linkId" = 6;
+delete from links
+where "id" = 6 */
+
+// export db methods
 module.exports = {
   client,
   getLinks,
@@ -237,5 +275,5 @@ module.exports = {
   updateLinkCount,
   createLinkTag,
   getLinksByTag,
-  // db methods
+  deleteLinkWithTag,
 };

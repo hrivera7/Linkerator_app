@@ -10,6 +10,15 @@
   justify-content: center;
 }
 
+.trash-can i {
+  padding-left: 15px;
+}
+
+/* .flexbox-wrap {
+  display: flex;
+  flex-wrap: wrap;
+} */
+
 .search-bar {
   margin-right: 10px;
 }

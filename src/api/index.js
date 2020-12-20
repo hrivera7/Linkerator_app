@@ -1,14 +1,5 @@
 import axios from "axios";
 
-/* export async function getSomething() {
-  try {
-    const { data } = await axios.get("/api");
-    return data;
-  } catch (error) {
-    throw error;
-  }
-} */
-
 export async function getLinks() {
   try {
     const { data } = await axios.get("/api/links");
@@ -30,8 +21,14 @@ export async function getLinksByTag(tag) {
 export async function createLinksWithTags(url, comment, name) {
   const dataToSend = { url, comment, name };
   try {
-    const { data } = await axios.post(`/api/links`, dataToSend);
-    return data;
+    if (
+      dataToSend.url.length > 0 &&
+      dataToSend.comment.length > 0 &&
+      dataToSend.name.length > 0
+    ) {
+      const { data } = await axios.post(`/api/links`, dataToSend);
+      return data;
+    }
   } catch (error) {
     throw error;
   }
@@ -51,6 +48,16 @@ export async function addClick(id) {
   const dataToSend = { id };
   try {
     const { data } = await axios.patch(`/api/links/${id}/add`, dataToSend);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteLink(id) {
+  const dataToSend = { id };
+  try {
+    const { data } = await axios.delete(`/api/links/${id}`, dataToSend);
     return data;
   } catch (error) {
     throw error;

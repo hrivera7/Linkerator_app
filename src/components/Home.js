@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CreateLinks from "./CreateLinks";
 import { Card, Input } from "semantic-ui-react";
-import { getLinks, addClick } from "../api";
+import { getLinks, addClick, deleteLink } from "../api";
 
 const Home = (props) => {
   console.log(props);
@@ -65,6 +65,7 @@ const Home = (props) => {
     addClick(id)
       .then((response) => {
         console.log(response);
+        window.location.reload(false);
       })
       .catch((error) => {
         console.log(error.response.data);
@@ -72,6 +73,12 @@ const Home = (props) => {
         console.log(error.response.headers);
       });
   };
+
+  const removeLink = (id) => {
+    deleteLink(id);
+    window.location.reload(false);
+  };
+
   console.log("links", links);
 
   return (
@@ -111,15 +118,23 @@ const Home = (props) => {
                     <div key={link.id} className="link-card">
                       <Card>
                         <Card.Content style={{ border: "none" }}>
-                          <Card.Header>
+                          <Card.Header className="trash-can">
                             <a
-                              href={link.url}
+                              href={
+                                !link.url.indexOf("http")
+                                  ? `${link.url}`
+                                  : `https://${link.url}`
+                              }
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={() => addCount(link.id)}
                             >
                               {link.url}
                             </a>
+                            <i
+                              className="trash icon"
+                              onClick={() => removeLink(link.id)}
+                            ></i>
                           </Card.Header>
                           <div>
                             <b>Date:</b>&nbsp;
@@ -129,17 +144,20 @@ const Home = (props) => {
                             <b>Views:</b> &nbsp;
                             {link.clickCount}
                           </div>
-                          <div className="flexbox">
+                          <div className="flexbox-wrap">
                             <b>Tags:</b> &nbsp;
                             {link.tags.map((tag) => {
-                              return (
-                                <span
-                                  className="tag"
-                                  onClick={() => searchTag(tag.name)}
-                                >
-                                  {tag.name}
-                                </span>
-                              );
+                              return tag.name.split(",").map((name) => {
+                                console.log("tagname", name);
+                                return (
+                                  <span
+                                    className="tag"
+                                    onClick={() => searchTag(name)}
+                                  >
+                                    {name}
+                                  </span>
+                                );
+                              });
                             })}
                           </div>
                         </Card.Content>

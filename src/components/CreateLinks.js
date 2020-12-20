@@ -14,6 +14,7 @@ const CreateLinks = () => {
     createLinksWithTags(linkData.url, linkData.comment, linkData.name)
       .then((result) => {
         console.log("created links with tag", result);
+        window.location.reload(false);
       })
       .catch((error) => {
         console.log(error.response.data);
